@@ -100,7 +100,7 @@ const form = document.getElementById('registerForm');
 const successMsg = document.getElementById('successMsg');
 
 // Replace with your deployed Google Apps Script Web App URL
-const webAppURL = "https://script.google.com/macros/s/AKfycbxHa9BGu9wGs--PbtDbdgjILd8CQRB_65ZMjN-PEy_rSlnzvtXuY9WQ5cKWl_2DR4f-ow/exec";
+const webAppURL = "https://script.google.com/macros/s/AKfycbxWrpfKV55qStKOGkOr1KWjN6Wo5bajmEjhwU-nfhae2s5yBIP77w229kJtiKZz6kIMcg/exec";
 
 // Generate a promo code if the user didn't enter one
 function generatePromoCode() {
@@ -139,7 +139,7 @@ form.addEventListener('submit', e => {
       form.reset();
 
       // Hide success message after 15 seconds
-      setTimeout(() => { successMsg.style.display = "none"; }, 15000);
+      setTimeout(() => { successMsg.style.display = "none"; }, 25000);
     } else {
       alert("Error submitting registration. Try again.");
     }
