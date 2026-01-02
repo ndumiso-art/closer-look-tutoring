@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Register | A Closer Look</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<header>
+  <img src="assets/logo.jpg" alt="Logo">
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
+
+<section class="card">
+  <h2>Register Your Interest</h2>
+
+  <form id="regForm">
+    <input type="text" placeholder="Name" required><br><br>
+    <input type="text" placeholder="Surname" required><br><br>
+
+    <label>Choose Session Slot:</label><br>
+    <select required>
+      <option value="">-- Select --</option>
+      <option>09h00 – 13h30</option>
+      <option>14h00 – 18h00</option>
+    </select><br><br>
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <p id="success"></p>
+</section>
+
+<script src="js/main.js"></script>
+</body>
+</html>
