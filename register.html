@@ -5,6 +5,7 @@
 <title>Register | A Closer Look</title>
 <link rel="stylesheet" href="css/styles.css">
 <style>
+/* Card styling */
 .register-card {
   max-width: 450px;
   margin: 3rem auto;
@@ -15,12 +16,16 @@
   text-align: center;
 }
 
-.register-card input, .register-card select, .register-card button {
+/* Input, select, button styling */
+.register-card input, 
+.register-card select, 
+.register-card button {
   width: 90%;
   padding: 0.8rem;
   margin: 0.5rem 0;
   border-radius: 10px;
   border: 1px solid #ccc;
+  font-size: 1rem;
 }
 
 .register-card button {
@@ -36,6 +41,7 @@
   color: #fff;
 }
 
+/* Success message */
 .success-msg {
   margin-top: 1rem;
   padding: 1rem;
@@ -92,44 +98,56 @@
 <script>
 const form = document.getElementById('registerForm');
 const successMsg = document.getElementById('successMsg');
-const webAppURL = "Yhttps://script.google.com/macros/s/AKfycbwceajwFt-AJ2Je7OoKvchhP4QCG0-mQydDoQdAQEgrrUbFrnhXp-mUJL1t2oTF1lGwsg/exec"; // Replace with Web App URL
 
+// Replace with your deployed Google Apps Script Web App URL
+const webAppURL = "YOUR_WEB_APP_URL_HERE";
+
+// Generate a promo code if the user didn't enter one
 function generatePromoCode() {
   return 'PROMO-' + Math.random().toString(36).substring(2,8).toUpperCase();
 }
 
+// Listen for form submission
 form.addEventListener('submit', e => {
   e.preventDefault();
 
   const formData = {
-    name: form.name.value,
-    surname: form.surname.value,
-    phone: form.phone.value,
+    name: form.name.value.trim(),
+    surname: form.surname.value.trim(),
+    phone: form.phone.value.trim(),
     grade: form.grade.value,
     slot: form.slot.value,
-    promo: form.promo.value || generatePromoCode()
+    promo: form.promo.value.trim() || generatePromoCode()
   };
 
   fetch(webAppURL, {
     method: 'POST',
-    headers: {'Content-Type': 'application/json'},
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(formData)
   })
   .then(response => response.json())
   .then(data => {
-    if(data.result === "success"){
+    if(data.result === "success") {
+      // Show success message
       successMsg.innerHTML = `
         Registration successful! ✅ <br>
         Your promo code is: <strong>${data.promo}</strong> <br>
         Write it down and share with friends!`;
       successMsg.style.display = "block";
+
+      // Clear form inputs after successful registration
       form.reset();
+
+      // Hide success message after 15 seconds
       setTimeout(() => { successMsg.style.display = "none"; }, 15000);
     } else {
       alert("Error submitting registration. Try again.");
     }
   })
-  .catch(err => alert("Error: " + err));
+  .catch(err => {
+    console.error("Registration error:", err);
+    alert("Error connecting to server. Make sure the Web App URL is correct and deployed.");
+  });
 });
 </script>
 
