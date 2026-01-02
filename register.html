@@ -4,6 +4,49 @@
 <meta charset="UTF-8">
 <title>Register | A Closer Look</title>
 <link rel="stylesheet" href="css/styles.css">
+<style>
+.register-card {
+  max-width: 450px;
+  margin: 3rem auto;
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  background: #ffffff;
+  text-align: center;
+}
+
+.register-card input, .register-card select, .register-card button {
+  width: 90%;
+  padding: 0.8rem;
+  margin: 0.5rem 0;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+
+.register-card button {
+  background-color: #f4d35e;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.register-card button:hover {
+  background-color: #ee6c4d;
+  color: #fff;
+}
+
+.success-msg {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 10px;
+  background-color: #d4edda;
+  color: #155724;
+  display: none;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+</style>
 </head>
 <body>
 
@@ -13,29 +56,83 @@
     <a href="index.html">Home</a>
     <a href="about.html">About</a>
     <a href="contact.html">Contact</a>
+    <a href="register.html">Register</a>
   </nav>
 </header>
 
-<section class="card">
-  <h2>Register Your Interest</h2>
+<div class="register-card">
+  <h2>Register for A Closer Look</h2>
 
-  <form id="regForm">
-    <input type="text" placeholder="Name" required><br><br>
-    <input type="text" placeholder="Surname" required><br><br>
+  <form id="registerForm">
+    <input type="text" name="name" placeholder="Name" required>
+    <input type="text" name="surname" placeholder="Surname" required>
+    <input type="tel" name="phone" placeholder="Phone Number" required>
 
-    <label>Choose Session Slot:</label><br>
-    <select required>
-      <option value="">-- Select --</option>
-      <option>09h00 – 13h30</option>
-      <option>14h00 – 18h00</option>
-    </select><br><br>
+    <select name="grade" required>
+      <option value="">Select Grade</option>
+      <option value="Grade 10">Grade 10</option>
+      <option value="Grade 11">Grade 11</option>
+      <option value="Grade 12">Grade 12</option>
+    </select>
 
-    <button type="submit">Submit</button>
+    <select name="slot" required>
+      <option value="">Select Slot</option>
+      <option value="09h00-13h30">09h00 - 13h30</option>
+      <option value="14h00-18h00">14h00 - 18h00</option>
+    </select>
+
+    <input type="text" name="promo" placeholder="Optional Promo Code">
+
+    <button type="submit">Register Now</button>
   </form>
 
-  <p id="success"></p>
-</section>
+  <div class="success-msg" id="successMsg"></div>
+</div>
 
-<script src="js/main.js"></script>
+<script>
+const form = document.getElementById('registerForm');
+const successMsg = document.getElementById('successMsg');
+const webAppURL = "Yhttps://script.google.com/macros/s/AKfycbwceajwFt-AJ2Je7OoKvchhP4QCG0-mQydDoQdAQEgrrUbFrnhXp-mUJL1t2oTF1lGwsg/exec"; // Replace with Web App URL
+
+function generatePromoCode() {
+  return 'PROMO-' + Math.random().toString(36).substring(2,8).toUpperCase();
+}
+
+form.addEventListener('submit', e => {
+  e.preventDefault();
+
+  const formData = {
+    name: form.name.value,
+    surname: form.surname.value,
+    phone: form.phone.value,
+    grade: form.grade.value,
+    slot: form.slot.value,
+    promo: form.promo.value || generatePromoCode()
+  };
+
+  fetch(webAppURL, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(formData)
+  })
+  .then(response => response.json())
+  .then(data => {
+    if(data.result === "success"){
+      successMsg.innerHTML = `
+        Registration successful! ✅ <br>
+        Your promo code is: <strong>${data.promo}</strong> <br>
+        Write it down and share with friends!`;
+      successMsg.style.display = "block";
+      form.reset();
+      setTimeout(() => { successMsg.style.display = "none"; }, 15000);
+    } else {
+      alert("Error submitting registration. Try again.");
+    }
+  })
+  .catch(err => alert("Error: " + err));
+});
+</script>
+
 </body>
 </html>
+
