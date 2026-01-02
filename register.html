@@ -5,53 +5,34 @@
 <title>Register | A Closer Look</title>
 <link rel="stylesheet" href="css/styles.css">
 <style>
-/* Card styling */
-.register-card {
-  max-width: 450px;
-  margin: 3rem auto;
-  padding: 2rem;
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-  background: #ffffff;
-  text-align: center;
-}
+  /* Simple inline styles for the form */
+  .register-card {
+    max-width: 400px;
+    margin: 3rem auto;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    background: #ffffff;
+    text-align: center;
+  }
 
-/* Input, select, button styling */
-.register-card input, 
-.register-card select, 
-.register-card button {
-  width: 90%;
-  padding: 0.8rem;
-  margin: 0.5rem 0;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-  font-size: 1rem;
-}
+  .register-card input, .register-card select, .register-card button {
+    width: 90%;
+    padding: 0.8rem;
+    margin: 0.5rem 0;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+  }
 
-.register-card button {
-  background-color: #f4d35e;
-  border: none;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-.register-card button:hover {
-  background-color: #ee6c4d;
-  color: #fff;
-}
-
-/* Success message */
-.success-msg {
-  margin-top: 1rem;
-  padding: 1rem;
-  border-radius: 10px;
-  background-color: #d4edda;
-  color: #155724;
-  display: none;
-  font-weight: bold;
-  font-size: 1.1rem;
-}
+  .success-msg {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 10px;
+    background-color: #d4edda;
+    color: #155724;
+    display: none;
+    font-weight: bold;
+  }
 </style>
 </head>
 <body>
@@ -72,85 +53,63 @@
   <form id="registerForm">
     <input type="text" name="name" placeholder="Name" required>
     <input type="text" name="surname" placeholder="Surname" required>
-    <input type="tel" name="phone" placeholder="Phone Number" required>
-
+    
     <select name="grade" required>
       <option value="">Select Grade</option>
       <option value="Grade 10">Grade 10</option>
       <option value="Grade 11">Grade 11</option>
       <option value="Grade 12">Grade 12</option>
     </select>
-
+    
     <select name="slot" required>
       <option value="">Select Slot</option>
       <option value="09h00-13h30">09h00 - 13h30</option>
       <option value="14h00-18h00">14h00 - 18h00</option>
     </select>
-
-    <input type="text" name="promo" placeholder="Optional Promo Code">
-
+    
     <button type="submit">Register Now</button>
   </form>
 
-  <div class="success-msg" id="successMsg"></div>
+  <div class="success-msg" id="successMsg">
+    Registration successful! ✅
+  </div>
 </div>
 
 <script>
 const form = document.getElementById('registerForm');
 const successMsg = document.getElementById('successMsg');
+const webAppURL = "https://script.google.com/macros/s/AKfycbw12MGsdefT8kgVU1tc94li4DlLb7nWuOPyvqtL7BKN5hXakFDDlTAEjvzRRiwOOaIF/exec"; // Replace with your Google Apps Script URL
 
-// Replace with your deployed Google Apps Script Web App URL
-const webAppURL = "https://script.google.com/macros/s/AKfycbw12MGsdefT8kgVU1tc94li4DlLb7nWuOPyvqtL7BKN5hXakFDDlTAEjvzRRiwOOaIF/exec";
-
-// Generate a promo code if the user didn't enter one
-function generatePromoCode() {
-  return 'PROMO-' + Math.random().toString(36).substring(2,8).toUpperCase();
-}
-
-// Listen for form submission
 form.addEventListener('submit', e => {
   e.preventDefault();
 
   const formData = {
-    name: form.name.value.trim(),
-    surname: form.surname.value.trim(),
-    phone: form.phone.value.trim(),
+    name: form.name.value,
+    surname: form.surname.value,
     grade: form.grade.value,
-    slot: form.slot.value,
-    promo: form.promo.value.trim() || generatePromoCode()
+    slot: form.slot.value
   };
 
   fetch(webAppURL, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(formData)
   })
   .then(response => response.json())
   .then(data => {
-    if(data.result === "success") {
+    if(data.result === "success"){
       // Show success message
-      successMsg.innerHTML = `
-        Registration successful! ✅ <br>
-        Your promo code is: <strong>${data.promo}</strong> <br>
-        Write it down and share with friends!`;
       successMsg.style.display = "block";
-
-      // Clear form inputs after successful registration
+      // Clear form
       form.reset();
-
-      // Hide success message after 15 seconds
-      setTimeout(() => { successMsg.style.display = "none"; }, 25000);
+      // Hide message after 5 seconds
+      setTimeout(() => { successMsg.style.display = "none"; }, 5000);
     } else {
-      alert("Error submitting registration. Try again.");
+      alert("There was an error. Try again.");
     }
   })
-  .catch(err => {
-    console.error("Registration error:", err);
-    alert("Error connecting to server. Make sure the Web App URL is correct and deployed.");
-  });
+  .catch(err => alert("Error: " + err));
 });
 </script>
 
 </body>
 </html>
-
