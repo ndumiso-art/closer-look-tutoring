@@ -70,7 +70,7 @@ nav a:hover::after {
 .hero {
   position: relative;
   height: 90vh;
-  background: url("https://images.pexels.com/photos/4145190/pexels-photo-4145190.jpeg") center/cover no-repeat;
+  background: url("../assets/Hero.jpeg") center/cover no-repeat;
   display: flex;
   align-items: center;
   justify-content: center;
